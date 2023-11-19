@@ -1,0 +1,16 @@
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[package]
+name = "japan-geoid"
+version = "0.1.0"
+edition = "2021"
+
+[dev-dependencies]
+flate2 = "1.0.27"
+
+[workspace]
+resolver = "2"
+members = ["./japan-geoid-py"]
+
+[profile.dev.package."*"]
+opt-level = 1
