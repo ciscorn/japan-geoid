@@ -7,6 +7,8 @@ edition = "2021"
 
 [dev-dependencies]
 flate2 = "1.0.27"
+lz4_flex = "0.11.1"
+zstd = "0.13.0"
 
 [workspace]
 resolver = "2"
