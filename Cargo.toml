@@ -4,6 +4,7 @@
 name = "japan-geoid"
 version = "0.1.0"
 edition = "2021"
+authors = ["Taku Fukada <naninunenor@gmail.com>", "MIERUNE Inc. <info@mierune.co.jp>"]
 
 [dev-dependencies]
 flate2 = "1.0.27"

@@ -7,6 +7,7 @@ name = "japan-geoid"
 description = "Calculate geoid heights in Japan using GSI's geoid model."
 readme = "README.md"
 authors = [
+  { name = "Taku Fukada", email = "naninunenor@gmail.com" },
   { name = "MIERUNE Inc.", email = "info@mierune.co.jp" },
 ]
 license = { file = "LICENSE.txt" }
@@ -23,3 +24,4 @@ repository = "https://github.com/MIERUNE/japan-geoid/japan-geoid-py"
 
 [tool.maturin]
 features = ["pyo3/extension-module"]
+
