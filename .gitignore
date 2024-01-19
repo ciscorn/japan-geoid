@@ -1,5 +1,6 @@
 /target
 gsigeo2011_ver2_2.*
+!gsigeo2011_ver2_2.bin.*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
