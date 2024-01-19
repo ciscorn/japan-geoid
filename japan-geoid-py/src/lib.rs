@@ -13,6 +13,13 @@ struct GsiGeoid {
 
 #[pymethods]
 impl GsiGeoid {
+    // Load the embedded GSIGEO2011 geoid model.
+    #[classmethod]
+    fn from_embedded_gsigeo2011(_cls: &PyType) -> PyResult<Self> {
+        let geoid = MemoryGrid::from_embedded_gsigeo2011();
+        Ok(GsiGeoid { geoid })
+    }
+
     /// Load the geoid model from the original ascii format.
     #[classmethod]
     fn from_ascii(_cls: &PyType, content: &str) -> PyResult<Self> {
@@ -41,7 +48,7 @@ impl GsiGeoid {
         self.geoid.get_height(lng, lat)
     }
 
-    /// Get the geoid height at each specified point.
+    /// Get the geoid height at each specified point. (for numpy)
     fn get_heights<'py>(
         &self,
         py: Python<'py>,

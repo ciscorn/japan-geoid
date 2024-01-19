@@ -1,26 +1,39 @@
-import gzip
+import math
 
-import japan_geoid
 import numpy as np
+from japan_geoid import GsiGeoid
 from pytest import approx
 
 
 def test_test():
-    with gzip.open("../../gsigeo2011_ver2_2.bin.gz", "rb") as f:
-        geoid = japan_geoid.GsiGeoid(f.read())
+    geoid = GsiGeoid.from_embedded_gsigeo2011()
 
     assert geoid.get_height(138.2839817085188, 37.12378643088312) == approx(
-        39.47387210863509, 1e-12
+        39.473870927576634,  # calculated with proj
+        1e-7,
     )
     assert geoid.get_height(141.36199967724426, 43.06539278249951) == approx(
-        31.900711649958033, 1e-12
+        31.900711175124826,  # calculated with proj
+        1e-7,
+    )
+    assert geoid.get_height(141.36199967724426, 43.06539278249951) == approx(
+        31.900711175124826,  # calculated with proj
+        1e-7,
     )
 
-    print(
-        geoid.get_heights(
-            np.array([138.2839817085188, 141.36199967724426]),
-            np.array([37.12378643088312, 43.06539278249951]),
-        )
+    assert math.isnan(geoid.get_height(10.0, 10.0))
+
+    assert geoid.get_heights(
+        np.array([138.2839817085188, 141.36199967724426]),
+        np.array([37.12378643088312, 43.06539278249951]),
+    ) == approx(
+        np.array(
+            [
+                39.473870927576634,  # calculated with proj
+                31.900711175124826,  # calculated with proj
+            ]
+        ),
+        1e-7,
     )
 
 

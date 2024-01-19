@@ -2,9 +2,13 @@
 
 Python library to calculate geoid heights in Japan using [GSI's geoid model](https://fgd.gsi.go.jp/download/geoid.php).
 
-[国土地理院のジオイドモデル](https://fgd.gsi.go.jp/download/geoid.php)を用いて日本のジオイド高を計算する Python 用ライブラリ。
+国土地理院のジオイドモデル「[日本のジオイド2011](https://fgd.gsi.go.jp/download/geoid.php)」を用いて日本のジオイド高を計算する Rust 用および Python 用のライブラリです。国土地理院が提供するC++のサンプルコードに準拠した補間計算を行います。
 
-License: MIT License
+本ライブラリは、日本のジオイド2011 v.2.2 (gsigeo2011_ver2_2.asc) を元にしたジオイドデータを含んでいます。This library contains a derivative work based on gsigeo2011_ver2_2.asc, created with permission: 「測量法に基づく国土地理院長承認（使用）R 5JHs 560」 
+
+本ライブラリは、国土地理院が提供するものではありません。
+
+License: MIT
 
 ## Installation
 
@@ -17,32 +21,25 @@ pip install japan-geoid -U
 ```python
 from japan_geoid import GsiGeoid
 
-# オリジナルのASCII形式のジオイドモデルを読み込む。
-with open("gsigeo2011_ver2_2.asc", "r") as f:
-    geoid = GsiGeoid.from_ascii(f.read())
+geoid = GsiGeoid.from_embedded_gsigeo2011()
 
-# ジオイド高を取得する。
 (lng, lat) = (138.2839817085188, 37.12378643088312)
 height = geoid.get_height(lng, lat)
 print(f"{lng=} {lat=} {height=}")
 
-# ジオイドモデルを、効率的なバイナリ形式で保存する。
-# この例では更に gzip 形式での圧縮もしている。
-# 今後は、ASCII形式のデータを読まずに、このバイナリファイルを利用できる。
-import gzip
-with gzip.open("gsigeo2011_ver2_2.bin.gz", "wb") as dest_f:
-    dest_f.write(geoid.to_binary())
-
-# バイナリ形式のジオイドモデルを読み込む。
-with gzip.open("gsigeo2011_ver2_2.bin.gz", "rb") as f:
-    geoid = GsiGeoid.from_binary(f.read())
-
-# ジオイド高を取得する。
-(lng, lat) = (138.2839817085188, 37.12378643088312)
-height = geoid.get_height(lng, lat)
-print(f"{lng=} {lat=} {height=}")
+# Returns NaN if the input is outside the domain.
+geoid.get_height(10.0, 10.0)  # => nan
 ```
 
-### Numpy
+### With Numpy
 
-Use `geoid.get_heights(ndarray_of_lng, ndarray_of_lat)`.
+This library also works with Numpy to perform high-performance vectorized calculations.
+
+```python
+import numpy as np
+
+geoid.get_heights(
+    np.array([138.2839817085188, 141.36199967724426, ...]),
+    np.array([37.12378643088312, 43.06539278249951, ...]),
+)
+```

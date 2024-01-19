@@ -48,6 +48,7 @@ pub trait Grid {
     fn grid_info(&self) -> &GsiGridInfo;
     fn lookup_grid_points(&self, ix: u32, iy: u32) -> f64;
 
+    #[inline]
     fn get_interpolated_value(&self, x: f64, y: f64) -> f64 {
         use std::f64::NAN;
         let grid = self.grid_info();
@@ -89,6 +90,8 @@ impl<'a> Grid for MemoryGrid<'a> {
     fn grid_info(&self) -> &GsiGridInfo {
         &self.grid_info
     }
+
+    #[inline]
     fn lookup_grid_points(&self, ix: u32, iy: u32) -> f64 {
         match self.points[(self.grid_info.x_num * iy + ix) as usize] {
             9990000 => f64::NAN,
@@ -98,12 +101,23 @@ impl<'a> Grid for MemoryGrid<'a> {
 }
 
 impl<'a> Geoid for MemoryGrid<'a> {
+    #[inline]
     fn get_height(&self, lng: f64, lat: f64) -> f64 {
         self.get_interpolated_value(lng, lat)
     }
 }
 
 impl<'a> MemoryGrid<'a> {
+    /// Loads the embedded GSIGEO2011 geoid model.
+    pub fn from_embedded_gsigeo2011() -> Self {
+        const EMBEDDED_MODEL: &[u8] = include_bytes!("gsigeo2011_ver2_2.bin.lz4");
+        Self::from_binary_reader(&mut std::io::Cursor::new(
+            lz4_flex::decompress_size_prepended(EMBEDDED_MODEL).unwrap(),
+        ))
+        .unwrap()
+    }
+
+    /// Loads the geoid model from a binary file.
     pub fn from_binary_reader<R: Read>(reader: &mut R) -> io::Result<Self> {
         // Read header
         let mut buf = [0; 28];
@@ -133,6 +147,7 @@ impl<'a> MemoryGrid<'a> {
         })
     }
 
+    /// Dumps the geoid model to a binary file.
     pub fn to_binary_writer<W: Write>(&self, writer: &mut W) -> io::Result<()> {
         // Write header
         writer.write_all(&(self.grid_info.x_num as u16).to_le_bytes())?;
@@ -143,7 +158,7 @@ impl<'a> MemoryGrid<'a> {
         writer.write_all(&self.grid_info.y_min.to_le_bytes())?;
         writer.write_all(&(self.grid_info.ikind).to_le_bytes())?;
         if self.grid_info.version.len() > 10 {
-            panic!("version string must be less than 10 characters");
+            panic!("version string must be shorter than 10 characters");
         }
         writer.write_all(self.grid_info.version.as_bytes())?;
         for _ in 0..10 - self.grid_info.version.len() {
