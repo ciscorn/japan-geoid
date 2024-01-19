@@ -1,14 +1,12 @@
 # japan-geoid-py
 
-Python library to calculate geoid heights in Japan using [GSI's geoid model](https://fgd.gsi.go.jp/download/geoid.php).
+A Python library for calculating geoid heights in Japan using [GSI's geoid model](https://fgd.gsi.go.jp/download/geoid.php). It contains a derivative work based on gsigeo2011_ver2_2.asc, created with permission: 「測量法に基づく国土地理院長承認（使用）R 5JHs 560」 
 
-国土地理院のジオイドモデル「[日本のジオイド2011](https://fgd.gsi.go.jp/download/geoid.php)」を用いて日本のジオイド高を計算する Rust 用および Python 用のライブラリです。国土地理院が提供するC++のサンプルコードに準拠した補間計算を行います。
-
-本ライブラリは、日本のジオイド2011 v.2.2 (gsigeo2011_ver2_2.asc) を元にしたジオイドデータを含んでいます。This library contains a derivative work based on gsigeo2011_ver2_2.asc, created with permission: 「測量法に基づく国土地理院長承認（使用）R 5JHs 560」 
-
-本ライブラリは、国土地理院が提供するものではありません。
+Python で日本のジオイド高を計算するためライブラリです。国土地理院のジオイドモデル「[日本のジオイド2011](https://fgd.gsi.go.jp/download/geoid.php)」を用いて、国土地理院の C++ のサンプルコードに準拠した補間計算を行います。本ライブラリは、日本のジオイド2011 v.2.2 (gsigeo2011_ver2_2.asc) を元にしたジオイドデータを含んでいます。「測量法に基づく国土地理院長承認（使用）R 5JHs 560」。このライブラリは Rust で実装されており、Rust の crate としても利用できます。
 
 License: MIT
+
+本ライブラリは、国土地理院が提供するものではありません。
 
 ## Installation
 
@@ -43,3 +41,14 @@ geoid.get_heights(
     np.array([37.12378643088312, 43.06539278249951, ...]),
 )
 ```
+
+## License
+
+MIT License
+
+「測量法に基づく国土地理院長承認（使用）R 5JHs 560」
+
+## Authors
+
+- Taku Fukada
+- [MIERUNE Inc.](https://www.mierune.co.jp/)
