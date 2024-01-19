@@ -2,54 +2,70 @@
 
 Rust and Python library for calculating geoid heights in Japan using [GSI's geoid model](https://fgd.gsi.go.jp/download/geoid.php).
 
-[国土地理院のジオイドモデル](https://fgd.gsi.go.jp/download/geoid.php)を用いて日本のジオイド高を計算する Rust 用および Python 用のライブラリ。
+国土地理院のジオイドモデル「[日本のジオイド2011](https://fgd.gsi.go.jp/download/geoid.php)」を用いて日本のジオイド高を計算する Rust 用および Python 用のライブラリです。国土地理院が提供するC++のサンプルコードに準拠した補間計算を行います。
 
-## Python binding
+本ライブラリは、日本のジオイド2011 v.2.2 (gsigeo2011_ver2_2.asc) を元にしたジオイドデータを含んでいます。This library contains a derivative work based on gsigeo2011_ver2_2.asc, created with permission: 「測量法に基づく国土地理院長承認（使用）R 5JHs 560」 
 
-See [`japan-geoid-py`](./japan-geoid-py/).
+本ライブラリは、国土地理院が提供するものではありません。
 
-## Rust crate
+License: MIT
 
-See examples in the [examples](./examples/) directory.
+## Use in Python
+
+### Installation
+
+```
+pip install japan-geoid -U
+```
+
+### Usage
+
+```python
+from japan_geoid import GsiGeoid
+
+geoid = GsiGeoid.from_embedded_gsigeo2011()
+
+(lng, lat) = (138.2839817085188, 37.12378643088312)
+height = geoid.get_height(lng, lat)
+print(f"{lng=} {lat=} {height=}")
+
+# Returns NaN if the input is outside the domain.
+geoid.get_height(10.0, 10.0)) # => nan
+```
+
+## Use in Rust
+
+### Installation
+
+TODO:
+
+### Usage
 
 ```rust
-use flate2::{read::GzDecoder, write::GzEncoder};
-use std::fs::File;
-use std::io::{BufReader, BufWriter};
-
 use japan_geoid::{Geoid, MemoryGrid};
 
-fn main() -> std::io::Result<()> {
-    let (lng, lat) = (138.2839817085188, 37.12378643088312);
-
-    // Load from the original ascii format.
-    let geoid =
-        MemoryGrid::from_ascii_reader(&mut BufReader::new(File::open("./gsigeo2011_ver2_2.asc")?))?;
+fn main() {
+    // Load the embedded GSIGEO2011 v2.1 model made from the GSIGEO 2011.
+    let geoid = MemoryGrid::from_embedded_gsigeo2011();
 
     // Calculate the geoid height.
+    let (lng, lat) = (138.2839817085188, 37.12378643088312);
     let height = geoid.get_height(lng, lat);
     println!(
         "Input: (lng: {}, lat: {}) -> Geoid height: {}",
         lng, lat, height
     );
 
-    // Dump as the efficient binary format.
-    geoid.to_binary_writer(&mut GzEncoder::new(
-        BufWriter::new(File::create("./gsigeo2011_ver2_2.bin.gz")?),
-        flate2::Compression::fast(),
-    ))?;
-
-    // Load the binary model.
-    let geoid = MemoryGrid::from_binary_reader(&mut GzDecoder::new(File::open(
-        "./gsigeo2011_ver2_2.bin.gz",
-    )?))?;
-
-    let height = geoid.get_height(lng, lat);
-    println!(
-        "Input: (lng: {}, lat: {}) -> Geoid height: {}",
-        lng, lat, height
-    );
-
-    Ok(())
+    // Returns NaN if the input is outside the domain.
+    assert!(f64::is_nan(geoid.get_height(10.0, 10.0)))
 }
 ```
+
+## LICENSE
+
+MIT
+
+## Authors
+
+- Taku Fukada
+- [MIERUNE Inc.](https://www.mierune.co.jp/)

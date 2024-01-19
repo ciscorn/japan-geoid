@@ -2,9 +2,12 @@
 
 [package]
 name = "japan-geoid"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2021"
-authors = ["Taku Fukada <naninunenor@gmail.com>", "MIERUNE Inc. <info@mierune.co.jp>"]
+authors = [
+    "Taku Fukada <naninunenor@gmail.com>",
+    "MIERUNE Inc. <info@mierune.co.jp>",
+]
 
 [dev-dependencies]
 flate2 = "1.0.27"
@@ -17,3 +20,6 @@ members = ["./japan-geoid-py"]
 
 [profile.dev.package."*"]
 opt-level = 1
+
+[dependencies]
+lz4_flex = "0.11.1"

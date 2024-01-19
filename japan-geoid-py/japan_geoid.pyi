@@ -6,6 +6,11 @@ class GsiGeoid:
     """GSIGEO2011 geoid model for Japan."""
 
     @classmethod
+    def from_embedded_gsigeo2011(cls) -> Self:
+        """Load the embedded GSIGEO2011 geoid model."""
+        return japan_geoid.GsiGeoid.from_embedded_gsigeo2011()
+
+    @classmethod
     def from_ascii(cls, content: str) -> Self:
         """Load the geoid model from the original ascii format."""
         return japan_geoid.GsiGeoid.from_ascii(content)
