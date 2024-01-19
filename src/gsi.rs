@@ -1,6 +1,7 @@
 use std::borrow::Cow;
 use std::io::{self, BufRead, Read, Write};
 
+/// Grid parameters
 #[derive(Debug)]
 pub struct GsiGridInfo {
     /// Number of grid points along X-axis
@@ -21,6 +22,7 @@ pub struct GsiGridInfo {
     version: String,
 }
 
+/// In-memory gridded geoid model
 #[derive(Debug)]
 pub struct MemoryGrid<'a> {
     pub grid_info: GsiGridInfo,
@@ -40,10 +42,12 @@ fn bilinear(x: f64, y: f64, v00: f64, v01: f64, v10: f64, v11: f64) -> f64 {
     }
 }
 
+/// Geoid model
 pub trait Geoid {
     fn get_height(&self, lng: f64, lat: f64) -> f64;
 }
 
+/// Gridded geoid model
 pub trait Grid {
     fn grid_info(&self) -> &GsiGridInfo;
     fn lookup_grid_points(&self, ix: u32, iy: u32) -> f64;
@@ -87,10 +91,12 @@ pub trait Grid {
 }
 
 impl<'a> Grid for MemoryGrid<'a> {
+    /// Gets grid parameters
     fn grid_info(&self) -> &GsiGridInfo {
         &self.grid_info
     }
 
+    /// Gets the value of the grid point at (ix, iy)
     #[inline]
     fn lookup_grid_points(&self, ix: u32, iy: u32) -> f64 {
         match self.points[(self.grid_info.x_num * iy + ix) as usize] {
@@ -101,6 +107,7 @@ impl<'a> Grid for MemoryGrid<'a> {
 }
 
 impl<'a> Geoid for MemoryGrid<'a> {
+    /// Gets the height of the geoid at (lng, lat)
     #[inline]
     fn get_height(&self, lng: f64, lat: f64) -> f64 {
         self.get_interpolated_value(lng, lat)
@@ -183,6 +190,7 @@ impl<'a> MemoryGrid<'a> {
         Ok(())
     }
 
+    /// Loads GSI's original geoid model in ASCII format.
     pub fn from_ascii_reader<R: BufRead>(reader: &mut R) -> io::Result<Self> {
         use io::{Error, ErrorKind::InvalidData};
         let mut reader = io::BufReader::new(reader);

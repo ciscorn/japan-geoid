@@ -20,7 +20,7 @@ classifiers = [
 ]
 
 [project.urls]
-repository = "https://github.com/MIERUNE/japan-geoid/japan-geoid-py"
+repository = "https://github.com/MIERUNE/japan-geoid/"
 
 [tool.maturin]
 features = ["pyo3/extension-module"]
