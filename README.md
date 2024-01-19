@@ -1,6 +1,7 @@
 # japan-geoid
 
 [![CI](https://github.com/MIERUNE/japan-geoid/actions/workflows/maturin.yml/badge.svg)](https://github.com/MIERUNE/japan-geoid/actions/workflows/maturin.yml)
+[![codecov](https://codecov.io/gh/MIERUNE/japan-geoid/graph/badge.svg?token=c9T2ayChfw)](https://codecov.io/gh/MIERUNE/japan-geoid)
 
 A Rust and Python library for calculating geoid heights in Japan using [GSI's geoid model](https://fgd.gsi.go.jp/download/geoid.php). This library contains geoid data based on `gsigeo2011_ver2_2.asc`, created with permission: 「測量法に基づく国土地理院長承認（使用）R 5JHs 560」 
 
