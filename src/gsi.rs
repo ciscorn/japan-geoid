@@ -109,6 +109,14 @@ impl<'a> Geoid for MemoryGrid<'a> {
 
 impl<'a> MemoryGrid<'a> {
     /// Loads the embedded GSIGEO2011 geoid model.
+    ///
+    /// ```
+    /// use japan_geoid::{Geoid, MemoryGrid};
+    ///
+    /// let geoid = MemoryGrid::from_embedded_gsigeo2011();
+    /// let height = geoid.get_height(138.2839817085188, 37.12378643088312);
+    /// assert!((height - 39.473870927576634).abs() < 1e-6)
+    /// ```
     pub fn from_embedded_gsigeo2011() -> Self {
         const EMBEDDED_MODEL: &[u8] = include_bytes!("gsigeo2011_ver2_2.bin.lz4");
         Self::from_binary_reader(&mut std::io::Cursor::new(
@@ -158,7 +166,10 @@ impl<'a> MemoryGrid<'a> {
         writer.write_all(&self.grid_info.y_min.to_le_bytes())?;
         writer.write_all(&(self.grid_info.ikind).to_le_bytes())?;
         if self.grid_info.version.len() > 10 {
-            panic!("version string must be shorter than 10 characters");
+            return Err(io::Error::new(
+                io::ErrorKind::InvalidData,
+                "version string must be shorter than 10 characters",
+            ));
         }
         writer.write_all(self.grid_info.version.as_bytes())?;
         for _ in 0..10 - self.grid_info.version.len() {
@@ -238,5 +249,98 @@ impl<'a> MemoryGrid<'a> {
             grid_info,
             points: points.into(),
         })
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use core::panic;
+    use std::fs::File;
+    use std::io::{BufReader, Cursor};
+
+    use super::*;
+
+    #[test]
+    fn embedded() {
+        let geoid = MemoryGrid::from_embedded_gsigeo2011();
+        let _ = format!("{:?}", geoid);
+
+        let height = geoid.get_height(138.2839817085188, 37.12378643088312);
+        assert!((height - 39.473870927576634).abs() < 1e-6);
+
+        let height = geoid.get_height(10.0, 10.0);
+        assert!(f64::is_nan(height));
+
+        let height = geoid.get_height(120.0, 20.0);
+        assert!(f64::is_nan(height));
+
+        let height = geoid.get_height(120.0, 30.0);
+        assert!(f64::is_nan(height));
+
+        let height = geoid.get_height(130.0, 20.0);
+        assert!(f64::is_nan(height));
+
+        let height = geoid.get_height(130.0, 20.0);
+        assert!(f64::is_nan(height));
+
+        let height = geoid.get_height(130.0, 60.0);
+        assert!(f64::is_nan(height));
+
+        let height = geoid.get_height(150.0, 30.0);
+        assert!(f64::is_nan(height));
+
+        let info = geoid.grid_info();
+        let _ = format!("{:?}", info);
+        assert_eq!(info.x_num, 1201);
+        assert_eq!(info.y_num, 1801);
+        assert_eq!(info.version, "ver2.2\0\0\0\0");
+        assert_eq!(info.x_denom, 40);
+        assert_eq!(info.y_denom, 60);
+        assert_eq!(info.x_min, 120.0);
+        assert_eq!(info.y_min, 20.0);
+    }
+
+    #[test]
+    fn ascii_to_binary() {
+        // from ascii
+        let mut reader = BufReader::new(File::open("./tests/dummy-geoid.asc").unwrap());
+        let geoid = MemoryGrid::from_ascii_reader(&mut reader).unwrap();
+
+        // to binary
+        let mut buffer = Vec::new();
+        geoid.to_binary_writer(&mut buffer).unwrap();
+
+        // from binary
+        let mut geoid = MemoryGrid::from_binary_reader(&mut Cursor::new(buffer)).unwrap();
+
+        // to binary (broken data)
+        let mut buffer = Vec::new();
+        geoid.grid_info.version = "ver22222222222222".to_string();
+        geoid
+            .to_binary_writer(&mut buffer)
+            .expect_err("version string must be shorter than 10 characters");
+    }
+
+    #[test]
+    fn broken_asc_headers() {
+        let headers = vec![
+            "20.aaa00 120.00000 0.016667 0.025000 1801 1201 1 ver2.2",
+            "20.00000 120.0bbb0 0.016667 0.025000 1801 1201 1 ver2.2",
+            "20.00000 120.00000 0.116667 0.025000 1801 1201 1 ver2.2",
+            "20.00000 120.00000 0.016667 0.225000 1801 1201 1 ver2.2",
+            "20.00000 120.00000 0.016667 0.025000 -1801 1201 1 ver2.2",
+            "20.00000 120.00000 0.016667 0.025000 1801 -1201 1 ver2.2",
+            "20.00000 120.00000 0.016667 0.025000 1801 1201 z ver2.2",
+            "20.00000 120.00000 0.016667 0.025000 1801 1201 1 ver2.2 foobar",
+            "20.00000 120.00000 0.016667 0.025000 1801 1201 1 ver2.2\n000.000a",
+        ];
+
+        for h in headers {
+            let Err(err) = MemoryGrid::from_ascii_reader(&mut BufReader::new(Cursor::new(h)))
+            else {
+                panic!("expected error");
+            };
+            println!("{:?}", err);
+        }
     }
 }
