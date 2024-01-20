@@ -9,7 +9,7 @@
 
 A Rust, Python and JavaScript (WASM) library for calculating geoid heights for Japan using [GSI's geoid model](https://fgd.gsi.go.jp/download/geoid.php). This library contains geoid data based on `gsigeo2011_ver2_2.asc`, created with permission: 「測量法に基づく国土地理院長承認（使用）R 5JHs 560」.
 
-Rust および Python で日本のジオイド高を計算するためライブラリです。国土地理院のジオイドモデル「[日本のジオイド2011](https://fgd.gsi.go.jp/download/geoid.php)」を用いて、国土地理院による C++ のサンプルコードに準拠した補間計算を行います。本ライブラリは、日本のジオイド2011 v.2.2 (`gsigeo2011_ver2_2.asc`) を元にしたジオイドデータを含んでいます（測量法に基づく国土地理院長承認（使用）R 5JHs 560）。
+Rust, Python, JavaScript で日本のジオイド高を計算するためライブラリです。国土地理院のジオイドモデル「[日本のジオイド2011](https://fgd.gsi.go.jp/download/geoid.php)」を用いて、国土地理院による C++ のサンプルコードに準拠した補間計算を行います。本ライブラリは、日本のジオイド2011 v.2.2 (`gsigeo2011_ver2_2.asc`) を元にしたジオイドデータを含んでいます（測量法に基づく国土地理院長承認（使用）R 5JHs 560）。
 
 License: MIT
 
@@ -77,18 +77,23 @@ npm add japan-geoid
 ### Usage
 
 ```javascript
-import { load_embedded_gsigeo2011 } from 'japan-geoid';
+import init, { load_embedded_gsigeo2011 } from "japan-geoid";
+
+await init(); // load WASM
 
 const geoid = load_embedded_gsigeo2011();
 
-geoid.get_height(138.2839817085188, 37.12378643088312); // => 39.47387115961899
+console.log(
+  geoid.get_height(138.2839817085188, 37.12378643088312)
+); // => 39.47387115961899
 
-geoid.get_heights(
-  [138.2839817085188, 141.36199967724426],
-  [37.12378643088312, 43.06539278249951]
+console.log(
+  geoid.get_heights(
+    [138.2839817085188, 141.36199967724426],
+    [37.12378643088312, 43.06539278249951]
+  )
 ); // => Float64Array(2) [ 39.47387115961899, 31.90071200378531 ]
 ```
-
 
 ## License
 

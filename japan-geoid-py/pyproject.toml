@@ -10,7 +10,7 @@ authors = [
   { name = "Taku Fukada", email = "naninunenor@gmail.com" },
   { name = "MIERUNE Inc.", email = "info@mierune.co.jp" },
 ]
-license = { file = "LICENSE.txt" }
+license = "MIT"
 requires-python = ">=3.8"
 classifiers = [
     "License :: OSI Approved :: MIT License",
