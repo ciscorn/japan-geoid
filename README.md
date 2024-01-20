@@ -32,7 +32,7 @@ geoid = load_embedded_gsigeo2011()
 
 (lng, lat) = (138.2839817085188, 37.12378643088312)
 height = geoid.get_height(lng, lat)
-print(f"{lng=} {lat=} {height=}")
+print(f"{lng=} {lat=} -> {height=}")
 
 # Returns NaN if the input is outside the domain.
 geoid.get_height(10.0, 10.0)) # => nan
