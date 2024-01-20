@@ -1,7 +1,7 @@
 """
 JGD2011 3D (EPSG:6697) -> WGS 84 Geograhic 3D (EPSG:4979) -> WGS 84 Geocentric 3D (EPSG:4978)
 
-$ echo 34.290 135.630 0 | python3 geog2geoc.py
+$ echo 135.630 34.290 0 | python3 geog2geoc.py
 """
 
 import gzip
@@ -9,7 +9,7 @@ import math
 import sys
 
 import pyproj
-from japan_geoid import GsiGeoid
+from japan_geoid import load_embedded_gsigeo2011
 
 # WGS 84 楕円体のパラメータ
 A = 6378137.0  # 長半径
@@ -39,14 +39,13 @@ def geog2geoc(lat, lng, ellipsoidal_heght):
 
 
 if __name__ == "__main__":
-    with gzip.open("../gsigeo2011_ver2_2.bin.gz", "rb") as f:
-        geoid = GsiGeoid.from_binary(f.read())
+    geoid = load_embedded_gsigeo2011()
 
     proj_geog_tr = pyproj.Transformer.from_crs("EPSG:6697", "EPSG:4978")
     proj_geoc_tr = pyproj.Transformer.from_crs("EPSG:6697", "EPSG:4979")
 
     for line in sys.stdin:
-        (lat, lng, elevation) = [float(v) for v in line.strip().split()]
+        (lng, lat, elevation) = [float(v) for v in line.strip().split()]
 
         # PROJ による変換 (JGD2011 -> WGS84 Geographic 3D)
         proj_lat, proj_lng, proj_height = proj_geoc_tr.transform(lat, lng, elevation)

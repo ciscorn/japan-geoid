@@ -1,4 +1,8 @@
 /target
+bin/
+pkg/
+Cargo.lock
+wasm-pack.log
 gsigeo2011_ver2_2.*
 !gsigeo2011_ver2_2.bin.*
 

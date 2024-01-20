@@ -1,55 +1,10 @@
+use crate::Geoid;
 use std::borrow::Cow;
 use std::io::{self, BufRead, Read, Write};
 
-/// Grid parameters
-#[derive(Debug)]
-pub struct GsiGridInfo {
-    /// Number of grid points along X-axis
-    x_num: u32,
-    /// Number of grid points along Y-axis
-    y_num: u32,
-    /// Denominator of grid interval along X-axis
-    x_denom: u32,
-    /// Denominator of grid interval along Y-axis
-    y_denom: u32,
-    /// Minimum value of X-axis
-    x_min: f32,
-    /// Minimum value of Y-axis
-    y_min: f32,
-    /// ikind (not used)
-    ikind: u16,
-    /// Version
-    version: String,
-}
-
-/// In-memory gridded geoid model
-#[derive(Debug)]
-pub struct MemoryGrid<'a> {
-    pub grid_info: GsiGridInfo,
-    points: Cow<'a, [i32]>,
-}
-
-/// Bilinear interpolation
-fn bilinear(x: f64, y: f64, v00: f64, v01: f64, v10: f64, v11: f64) -> f64 {
-    if x == 0.0 && y == 0.0 {
-        v00
-    } else if x == 0.0 {
-        v00 * (1.0 - y) + v10 * y
-    } else if y == 0.0 {
-        v00 * (1.0 - x) + v01 * x
-    } else {
-        v00 * (1.0 - x) * (1.0 - y) + v01 * x * (1.0 - y) + v10 * (1.0 - x) * y + v11 * x * y
-    }
-}
-
-/// Geoid model
-pub trait Geoid {
-    fn get_height(&self, lng: f64, lat: f64) -> f64;
-}
-
 /// Gridded geoid model
 pub trait Grid {
-    fn grid_info(&self) -> &GsiGridInfo;
+    fn grid_info(&self) -> &GridInfo;
     fn lookup_grid_points(&self, ix: u32, iy: u32) -> f64;
 
     #[inline]
@@ -90,9 +45,50 @@ pub trait Grid {
     }
 }
 
+/// Bilinear interpolation
+fn bilinear(x: f64, y: f64, v00: f64, v01: f64, v10: f64, v11: f64) -> f64 {
+    if x == 0.0 && y == 0.0 {
+        v00
+    } else if x == 0.0 {
+        v00 * (1.0 - y) + v10 * y
+    } else if y == 0.0 {
+        v00 * (1.0 - x) + v01 * x
+    } else {
+        v00 * (1.0 - x) * (1.0 - y) + v01 * x * (1.0 - y) + v10 * (1.0 - x) * y + v11 * x * y
+    }
+}
+
+/// Grid parameters
+#[derive(Debug)]
+pub struct GridInfo {
+    /// Number of grid points along X-axis
+    x_num: u32,
+    /// Number of grid points along Y-axis
+    y_num: u32,
+    /// Denominator of grid interval along X-axis
+    x_denom: u32,
+    /// Denominator of grid interval along Y-axis
+    y_denom: u32,
+    /// Minimum value of X-axis
+    x_min: f32,
+    /// Minimum value of Y-axis
+    y_min: f32,
+    /// ikind (not used)
+    ikind: u16,
+    /// Version
+    version: String,
+}
+
+/// In-memory gridded geoid model
+#[derive(Debug)]
+pub struct MemoryGrid<'a> {
+    pub grid_info: GridInfo,
+    points: Cow<'a, [i32]>,
+}
+
 impl<'a> Grid for MemoryGrid<'a> {
     /// Gets grid parameters
-    fn grid_info(&self) -> &GsiGridInfo {
+    fn grid_info(&self) -> &GridInfo {
         &self.grid_info
     }
 
@@ -115,29 +111,12 @@ impl<'a> Geoid for MemoryGrid<'a> {
 }
 
 impl<'a> MemoryGrid<'a> {
-    /// Loads the embedded GSIGEO2011 geoid model.
-    ///
-    /// ```
-    /// use japan_geoid::{Geoid, MemoryGrid};
-    ///
-    /// let geoid = MemoryGrid::from_embedded_gsigeo2011();
-    /// let height = geoid.get_height(138.2839817085188, 37.12378643088312);
-    /// assert!((height - 39.473870927576634).abs() < 1e-6)
-    /// ```
-    pub fn from_embedded_gsigeo2011() -> Self {
-        const EMBEDDED_MODEL: &[u8] = include_bytes!("gsigeo2011_ver2_2.bin.lz4");
-        Self::from_binary_reader(&mut std::io::Cursor::new(
-            lz4_flex::decompress_size_prepended(EMBEDDED_MODEL).unwrap(),
-        ))
-        .unwrap()
-    }
-
     /// Loads the geoid model from a binary file.
     pub fn from_binary_reader<R: Read>(reader: &mut R) -> io::Result<Self> {
         // Read header
         let mut buf = [0; 28];
         reader.read_exact(&mut buf)?;
-        let grid_info = GsiGridInfo {
+        let grid_info = GridInfo {
             x_num: u16::from_le_bytes(buf[0..2].try_into().unwrap()) as u32,
             y_num: u16::from_le_bytes(buf[2..4].try_into().unwrap()) as u32,
             x_denom: u16::from_le_bytes(buf[4..6].try_into().unwrap()) as u32,
@@ -214,7 +193,7 @@ impl<'a> MemoryGrid<'a> {
             ));
         }
 
-        let grid_info = GsiGridInfo {
+        let grid_info = GridInfo {
             x_num: c[5]
                 .parse()
                 .map_err(|_| Error::new(InvalidData, "cannot parse header"))?,
@@ -260,6 +239,24 @@ impl<'a> MemoryGrid<'a> {
     }
 }
 
+/// Loads the embedded GSIGEO2011 Japan geoid model.
+///
+/// ```
+/// use japan_geoid::gsi::load_embedded_gsigeo2011;
+/// use japan_geoid::Geoid;
+///
+/// let geoid = load_embedded_gsigeo2011();
+/// let height = geoid.get_height(138.2839817085188, 37.12378643088312);
+/// assert!((height - 39.473870927576634).abs() < 1e-6)
+/// ```
+pub fn load_embedded_gsigeo2011() -> MemoryGrid<'static> {
+    const EMBEDDED_MODEL: &[u8] = include_bytes!("gsigeo2011_ver2_2.bin.lz4");
+    MemoryGrid::from_binary_reader(&mut std::io::Cursor::new(
+        lz4_flex::decompress_size_prepended(EMBEDDED_MODEL).unwrap(),
+    ))
+    .unwrap()
+}
+
 #[cfg(test)]
 mod tests {
     use core::panic;
@@ -270,7 +267,7 @@ mod tests {
 
     #[test]
     fn embedded() {
-        let geoid = MemoryGrid::from_embedded_gsigeo2011();
+        let geoid = load_embedded_gsigeo2011();
         let _ = format!("{:?}", geoid);
 
         let height = geoid.get_height(138.2839817085188, 37.12378643088312);

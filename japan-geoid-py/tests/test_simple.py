@@ -1,12 +1,12 @@
 import math
 
 import numpy as np
-from japan_geoid import GsiGeoid
+from japan_geoid import load_embedded_gsigeo2011
 from pytest import approx
 
 
 def test_test():
-    geoid = GsiGeoid.from_embedded_gsigeo2011()
+    geoid = load_embedded_gsigeo2011()
 
     assert geoid.get_height(138.2839817085188, 37.12378643088312) == approx(
         39.473870927576634,  # calculated with proj

@@ -1,7 +1,8 @@
 use std::fs::{self, File};
 use std::io::{BufReader, Write};
 
-use japan_geoid::{Geoid, MemoryGrid};
+use japan_geoid::gsi::MemoryGrid;
+use japan_geoid::Geoid;
 
 fn main() -> std::io::Result<()> {
     let (lng, lat) = (138.2839817085188, 37.12378643088312);

@@ -3,7 +3,7 @@
 #
 #    maturin generate-ci github --manifest-path=japan-geoid-py/Cargo.toml
 #
-name: CI
+name: Maturin
 
 on:
   push:

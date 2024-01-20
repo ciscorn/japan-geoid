@@ -4,8 +4,8 @@ build-backend = "maturin"
 
 [project]
 name = "japan-geoid"
-description = "Calculate geoid heights in Japan using GSI's geoid model."
-readme = "README.md"
+description = "Calculate geoid heights for Japan using GSI's geoid model."
+readme = "../README.md"
 authors = [
   { name = "Taku Fukada", email = "naninunenor@gmail.com" },
   { name = "MIERUNE Inc.", email = "info@mierune.co.jp" },
@@ -17,6 +17,7 @@ classifiers = [
     "Programming Language :: Python :: Implementation :: CPython",
     "Programming Language :: Python :: Implementation :: PyPy",
     "Programming Language :: Rust",
+    "Topic :: Scientific/Engineering :: GIS",
 ]
 
 [project.urls]

@@ -1,23 +1,42 @@
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
-[package]
-name = "japan-geoid"
-version = "0.2.1"
+[workspace]
+resolver = "2"
+members = ["./japan-geoid-*"]
+
+[workspace.package]
+version = "0.3.0"
 edition = "2021"
 authors = [
     "Taku Fukada <naninunenor@gmail.com>",
     "MIERUNE Inc. <info@mierune.co.jp>",
 ]
-description = "Calculating geoid heights in Japan using GSI's geoid model."
+description = "Calculates geoid heights for Japan using GSI's geoid model."
 license-file = "LICENSE.txt"
 repository = "https://github.com/MIERUNE/japan-geoid"
+categories = ["science", "science::geo"]
+
+[package]
+name = "japan-geoid"
+version.workspace = true
+edition.workspace = true
+categories.workspace = true
+authors.workspace = true
+description.workspace = true
+license-file.workspace = true
+repository.workspace = true
+
+[lib]
+crate-type = ["cdylib", "rlib"]
 
 [dependencies]
-lz4_flex = "0.11.1"
+lz4_flex = { version = "0.11.1", default-features = false }
 
-[workspace]
-resolver = "2"
-members = ["./japan-geoid-py"]
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+wasm-bindgen = "0.2.84"
+
+[target.'cfg(target_arch = "wasm32")'.dev-dependencies]
+wasm-bindgen-test = "0.3.34"
 
 [profile.dev.package."*"]
 opt-level = 1

@@ -1,3 +1,8 @@
-mod gsi;
+pub mod gsi;
+#[cfg(target_arch = "wasm32")]
+pub mod wasm;
 
-pub use gsi::*;
+/// Geoid model
+pub trait Geoid {
+    fn get_height(&self, lng: f64, lat: f64) -> f64;
+}

@@ -4,22 +4,24 @@ use pyo3::prelude::*;
 use pyo3::types::PyType;
 use std::borrow::Cow;
 
-use ::japan_geoid::*;
+use ::japan_geoid::gsi::MemoryGrid;
+use ::japan_geoid::Geoid;
 
 #[pyclass]
-struct GsiGeoid {
+pub struct GsiGeoid {
     geoid: MemoryGrid<'static>,
+}
+
+// Load the embedded GSIGEO2011 geoid model.
+#[pyfunction]
+pub fn load_embedded_gsigeo2011() -> PyResult<GsiGeoid> {
+    Ok(GsiGeoid {
+        geoid: ::japan_geoid::gsi::load_embedded_gsigeo2011(),
+    })
 }
 
 #[pymethods]
 impl GsiGeoid {
-    // Load the embedded GSIGEO2011 geoid model.
-    #[classmethod]
-    fn from_embedded_gsigeo2011(_cls: &PyType) -> PyResult<Self> {
-        let geoid = MemoryGrid::from_embedded_gsigeo2011();
-        Ok(GsiGeoid { geoid })
-    }
-
     /// Load the geoid model from the original ascii format.
     #[classmethod]
     fn from_ascii(_cls: &PyType, content: &str) -> PyResult<Self> {
@@ -73,5 +75,6 @@ impl GsiGeoid {
 #[pymodule]
 fn japan_geoid(_py: Python, m: &PyModule) -> PyResult<()> {
     m.add_class::<GsiGeoid>()?;
+    m.add_function(wrap_pyfunction!(load_embedded_gsigeo2011, m)?)?;
     Ok(())
 }
