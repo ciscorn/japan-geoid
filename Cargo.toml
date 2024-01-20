@@ -5,7 +5,7 @@ resolver = "2"
 members = ["./japan-geoid-*"]
 
 [workspace.package]
-version = "0.3.1"
+version = "0.3.2"
 edition = "2021"
 authors = [
     "Taku Fukada <naninunenor@gmail.com>",

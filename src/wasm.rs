@@ -11,12 +11,12 @@ pub struct GsiGeoid {
 
 #[wasm_bindgen]
 impl GsiGeoid {
-    #[wasm_bindgen]
+    #[wasm_bindgen(js_name = "getHeight")]
     pub fn get_height(&self, lng: f64, lat: f64) -> f64 {
         self.geoid.get_height(lng, lat)
     }
 
-    #[wasm_bindgen]
+    #[wasm_bindgen(js_name = "getHeights")]
     pub fn get_heights(&self, lngs: &[f64], lats: &[f64]) -> Vec<f64> {
         lngs.iter()
             .zip(lats.iter())
@@ -25,7 +25,7 @@ impl GsiGeoid {
     }
 }
 
-#[wasm_bindgen]
+#[wasm_bindgen(js_name = "loadEmbeddedGSIGEO2011")]
 pub fn load_embedded_gsigeo2011() -> GsiGeoid {
     GsiGeoid {
         geoid: gsi::load_embedded_gsigeo2011(),

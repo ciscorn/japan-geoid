@@ -79,18 +79,18 @@ npm add japan-geoid
 ### Usage
 
 ```javascript
-import init, { load_embedded_gsigeo2011 } from "japan-geoid";
+import init, { loadEmbeddedGSIGEO2011 } from "japan-geoid";
 
 await init(); // load WASM
 
-const geoid = load_embedded_gsigeo2011();
+const geoid = loadEmbeddedGSIGEO2011();
 
 console.log(
-  geoid.get_height(138.2839817085188, 37.12378643088312)
+  geoid.getHeight(138.2839817085188, 37.12378643088312)
 ); // => 39.47387115961899
 
 console.log(
-  geoid.get_heights(
+  geoid.getHeights(
     [138.2839817085188, 141.36199967724426],
     [37.12378643088312, 43.06539278249951]
   )
