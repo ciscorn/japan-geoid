@@ -7,7 +7,7 @@
 ![PyPI - Version](https://img.shields.io/pypi/v/japan-geoid)
 ![NPM Version](https://img.shields.io/npm/v/japan-geoid)
 
-A Rust, Python and JavaScript (WASM) library for calculating geoid heights for Japan using [GSI's geoid model](https://fgd.gsi.go.jp/download/geoid.php). This library contains geoid data based on `gsigeo2011_ver2_2.asc`, created with permission: 「測量法に基づく国土地理院長承認（使用）R 5JHs 560」.
+A Rust, Python and JavaScript (WASM) library for calculating geoid heights in Japan using [GSI's geoid model](https://fgd.gsi.go.jp/download/geoid.php). This library contains geoid data based on `gsigeo2011_ver2_2.asc`, created with permission: 「測量法に基づく国土地理院長承認（使用）R 5JHs 560」.
 
 Rust, Python, JavaScript で日本のジオイド高を計算するためライブラリです。国土地理院のジオイドモデル「[日本のジオイド2011](https://fgd.gsi.go.jp/download/geoid.php)」を用いて、国土地理院による C++ のサンプルコードに準拠した補間計算を行います。本ライブラリは、日本のジオイド2011 v.2.2 (`gsigeo2011_ver2_2.asc`) を元にしたジオイドデータを含んでいます（測量法に基づく国土地理院長承認（使用）R 5JHs 560）。
 
@@ -32,7 +32,7 @@ geoid = load_embedded_gsigeo2011()
 
 (lng, lat) = (138.2839817085188, 37.12378643088312)
 height = geoid.get_height(lng, lat)
-print(f"{lng=} {lat=} {height=}")
+print(f"{lng=} {lat=} -> {height=}")
 
 # Returns NaN if the input is outside the domain.
 geoid.get_height(10.0, 10.0)) # => nan
