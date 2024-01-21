@@ -5,14 +5,13 @@ resolver = "2"
 members = ["./japan-geoid-*"]
 
 [workspace.package]
-version = "0.3.2"
+version = "0.4.0"
 edition = "2021"
 authors = [
     "Taku Fukada <naninunenor@gmail.com>",
     "MIERUNE Inc. <info@mierune.co.jp>",
 ]
 description = "Calculates geoid heights for Japan using GSI's geoid model."
-license-file = "LICENSE.txt"
 license = "MIT"
 repository = "https://github.com/MIERUNE/japan-geoid"
 categories = ["science", "science::geo"]
@@ -25,7 +24,6 @@ categories.workspace = true
 authors.workspace = true
 description.workspace = true
 license = "MIT"
-license-file.workspace = true
 repository.workspace = true
 
 [lib]

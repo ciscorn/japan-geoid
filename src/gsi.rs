@@ -129,10 +129,20 @@ impl<'a> MemoryGrid<'a> {
 
         // Read grid point values
         let mut points = Vec::with_capacity((grid_info.x_num * grid_info.y_num) as usize);
-        while points.len() < (grid_info.y_num * grid_info.x_num) as usize {
-            let mut buf = [0; 4];
+        let mut buf = [0; 4];
+        let mut prev_x1y1 = 9990000;
+        let mut prev_x1 = 9990000;
+        for pos in 0..(grid_info.y_num * grid_info.x_num) as usize {
+            // linear prediction
+            let prev_y1 = match pos {
+                _ if pos < grid_info.x_num as usize => 9990000,
+                _ => points[pos - grid_info.x_num as usize],
+            };
             reader.read_exact(&mut buf)?;
-            points.push(i32::from_le_bytes(buf));
+            let predicted = prev_x1 + prev_y1 - prev_x1y1;
+            let curr = predicted + i32::from_le_bytes(buf);
+            points.push(curr);
+            (prev_x1, prev_x1y1) = (curr, prev_y1);
         }
 
         Ok(MemoryGrid {
@@ -163,8 +173,19 @@ impl<'a> MemoryGrid<'a> {
         }
 
         // Write grid point values
-        for p in self.points.iter() {
-            writer.write_all(&p.to_le_bytes())?;
+        let mut prev_x1y1 = 9990000;
+        let mut prev_x1 = 9990000;
+        for pos in 0..(self.grid_info.y_num * self.grid_info.x_num) as usize {
+            // linear prediction
+            let curr = self.points[pos];
+            let prev_y1 = match pos {
+                _ if pos < self.grid_info.x_num as usize => 9990000,
+                _ => self.points[pos - self.grid_info.x_num as usize],
+            };
+            let predicted = prev_x1 + prev_y1 - prev_x1y1;
+            let d = curr - predicted;
+            writer.write_all(&d.to_le_bytes())?;
+            (prev_x1, prev_x1y1) = (curr, prev_y1);
         }
         Ok(())
     }
