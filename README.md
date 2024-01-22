@@ -38,6 +38,13 @@ print(f"{lng=} {lat=} {height=}")
 
 # Returns NaN if the input is outside the domain.
 geoid.get_height(10.0, 10.0)) # => nan
+
+# The library also works with Numpy.
+import numpy as np
+geoid.get_heights(
+    np.array([138.2839817085188, 141.36199967724426]),
+    np.array([37.12378643088312, 43.06539278249951]),
+)
 ```
 
 ## Rust
@@ -68,7 +75,7 @@ fn main() {
 }
 ```
 
-## JavaScript (WASM)
+## JavaScript (Wasm)
 
 ### Installation
 
@@ -81,7 +88,7 @@ npm add japan-geoid
 ```javascript
 import init, { loadEmbeddedGSIGEO2011 } from "japan-geoid";
 
-await init(); // load WASM
+await init(); // load .wasm
 
 const geoid = loadEmbeddedGSIGEO2011();
 
