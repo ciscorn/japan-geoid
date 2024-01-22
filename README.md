@@ -9,7 +9,7 @@
 
 A library for calculating geoid heights in Japan using GSI's geoid model. It is implemented in Rust and additionally supports Python and JavaScript. The library contains geoid data based on GSIGEO2011 (`gsigeo2011_ver2_2.asc`), created with the permission: 「測量法に基づく国土地理院長承認（使用）R 5JHs 560」.
 
-日本のジオイド高を計算するためライブラリです。Rust で実装されており、Python と JavaScript (WASM) でも利用できます。国土地理院のジオイドモデル「[日本のジオイド2011](https://fgd.gsi.go.jp/download/geoid.php)」を用いて、国土地理院による C++ のサンプルコードに準拠した補間計算を行います。本ライブラリには、日本のジオイド2011 v.2.2 (`gsigeo2011_ver2_2.asc`) を元にしたジオイドデータが同梱されています（測量法に基づく国土地理院長承認（使用）R 5JHs 560）。
+日本のジオイド高を計算するためライブラリです。Rust で実装されており、Python と JavaScript (Wasm) でも利用できます。国土地理院のジオイドモデル「[日本のジオイド2011](https://fgd.gsi.go.jp/download/geoid.php)」を用いて、国土地理院による C++ のサンプルコードに準拠した補間計算を行います。本ライブラリには、日本のジオイド2011 v.2.2 (`gsigeo2011_ver2_2.asc`) を元にしたジオイドデータが同梱されています（測量法に基づく国土地理院長承認（使用）R 5JHs 560）。
 
 License: MIT
 
