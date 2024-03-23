@@ -291,8 +291,16 @@ mod tests {
         let geoid = load_embedded_gsigeo2011();
         let _ = format!("{:?}", geoid);
 
+        // Compare with the result of PROJ
         let height = geoid.get_height(138.2839817085188, 37.12378643088312);
         assert!((height - 39.473870927576634).abs() < 1e-6);
+
+        // Compare with the result of GSI's online calculator
+        // https://vldb.gsi.go.jp/sokuchi/surveycalc/geoid/calcgh/calc_f.html
+        let height = geoid.get_height(141.12345, 43.12345);
+        assert!((height - 32.8389).abs() < 1e-4);
+        let height = geoid.get_height(127.6791822004209, 26.212208125371717);
+        assert!((height - 31.4807).abs() < 1e-4);
 
         let height = geoid.get_height(10.0, 10.0);
         assert!(f64::is_nan(height));

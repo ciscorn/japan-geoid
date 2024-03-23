@@ -75,7 +75,7 @@ fn main() {
 }
 ```
 
-## JavaScript (Wasm)
+## JavaScript (Wasm) - Experimental
 
 ### Installation
 
