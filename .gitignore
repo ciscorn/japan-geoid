@@ -5,6 +5,7 @@ Cargo.lock
 wasm-pack.log
 gsigeo2011_ver2_2.*
 !gsigeo2011_ver2_2.bin.*
+GSIGEO*.isg
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
