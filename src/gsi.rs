@@ -19,8 +19,8 @@ pub trait Grid {
 
         let ix = grid_x.floor() as u32;
         let iy = grid_y.floor() as u32;
-        let x_residual = grid_x % ix as f64;
-        let y_residual = grid_y % iy as f64;
+        let x_residual = grid_x - ix as f64;
+        let y_residual = grid_y - iy as f64;
 
         if ix >= grid.x_num || iy >= grid.y_num {
             NAN
