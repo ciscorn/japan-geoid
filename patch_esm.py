@@ -19,15 +19,15 @@ with open(pkg / "japan_geoid.js", encoding="utf-8") as f:
 patched = False
 with open(pkg / "japan_geoid.js", "w", encoding="utf-8") as f:
     for line in lines:
-        if line.strip() == "input = fetch(input);":
+        if line.strip() == "module_or_path = fetch(module_or_path);":
             f.write(
                 """try {
-            input = await fetch(input);
+            module_or_path = await fetch(module_or_path);
         } catch (e) {
             if (!(e instanceof TypeError)) {
                 throw e;
             }
-            input = await (await import("node:fs/promises")).readFile(input);
+            module_or_path = await (await import("node:fs/promises")).readFile(module_or_path);
         }"""
             )
             patched = True
