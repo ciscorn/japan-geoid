@@ -104,6 +104,13 @@ console.log(
 ); // => Float64Array(2) [ 39.47387115961899, 31.90071200378531 ]
 ```
 
+### Build
+
+```bash
+wasm-pack build -t web
+python patch_esm.py
+```
+
 ## License
 
 MIT License
@@ -114,3 +121,4 @@ MIT License
 
 - Taku Fukada
 - [MIERUNE Inc.](https://www.mierune.co.jp/)
+
