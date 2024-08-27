@@ -108,7 +108,6 @@ console.log(
 
 ```bash
 wasm-pack build -t web
-python patch_esm.py
 ```
 
 ## License
@@ -119,6 +118,5 @@ MIT License
 
 ## Authors
 
-- Taku Fukada
-- [MIERUNE Inc.](https://www.mierune.co.jp/)
+Taku Fukada ([@ciscorn](https://github.com/ciscorn))
 
