@@ -5,7 +5,6 @@ build-backend = "maturin"
 [project]
 name = "japan-geoid"
 description = "Calculate geoid heights for Japan using GSI's geoid model."
-readme = "README.md"
 authors = [
   { name = "Taku Fukada", email = "naninunenor@gmail.com" },
   { name = "MIERUNE Inc.", email = "info@mierune.co.jp" },
