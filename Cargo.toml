@@ -30,7 +30,7 @@ repository.workspace = true
 crate-type = ["cdylib", "rlib"]
 
 [dependencies]
-lz4_flex = { version = "0.11.1", default-features = false }
+lz4_flex = { version = "0.11.3", default-features = false }
 
 [target.'cfg(target_arch = "wasm32")'.dependencies]
 wasm-bindgen = "0.2.93"

@@ -11,6 +11,6 @@ name = "japan_geoid"
 crate-type = ["cdylib"]
 
 [dependencies]
-pyo3 = "0.22.3"
+pyo3 = "0.21.2"
 numpy = "0.21.0"
 japan-geoid = { path = "../" }
