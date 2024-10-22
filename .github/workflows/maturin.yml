@@ -92,8 +92,9 @@ jobs:
         platform:
           - runner: windows-latest
             target: x64
-          - runner: windows-latest
-            target: x86
+          # temporarily disabled due to https://github.com/PyO3/rust-numpy/issues/448
+          # - runner: windows-latest
+          #   target: x86
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
