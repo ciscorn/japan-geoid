@@ -24,7 +24,7 @@ pub fn load_embedded_gsigeo2011() -> PyResult<GsiGeoid> {
 impl GsiGeoid {
     /// Load the geoid model from the original ascii format.
     #[classmethod]
-    fn from_ascii(_cls: &PyType, content: &str) -> PyResult<Self> {
+    fn from_ascii(_cls: &Bound<'_, PyType>, content: &str) -> PyResult<Self> {
         let mut reader = std::io::Cursor::new(content);
         let geoid = MemoryGrid::from_ascii_reader(&mut reader)?;
         Ok(GsiGeoid { geoid })
@@ -32,7 +32,7 @@ impl GsiGeoid {
 
     /// Load the geoid model from the efficient binary format.
     #[classmethod]
-    fn from_binary(_cls: &PyType, content: &[u8]) -> PyResult<Self> {
+    fn from_binary(_cls: &Bound<'_, PyType>, content: &[u8]) -> PyResult<Self> {
         let mut reader = std::io::Cursor::new(content);
         let geoid = MemoryGrid::from_binary_reader(&mut reader)?;
         Ok(GsiGeoid { geoid })
@@ -56,7 +56,7 @@ impl GsiGeoid {
         py: Python<'py>,
         lng: PyReadonlyArrayDyn<'py, f64>,
         lat: PyReadonlyArrayDyn<'py, f64>,
-    ) -> PyResult<&'py PyArrayDyn<f64>> {
+    ) -> PyResult<Bound<'py, PyArrayDyn<f64>>> {
         if lng.shape() != lat.shape() {
             return Err(PyErr::new::<pyo3::exceptions::PyValueError, _>(
                 "lng and lat must have the same shape",
@@ -67,13 +67,13 @@ impl GsiGeoid {
             .and(lng.as_array())
             .and(lat.as_array())
             .for_each(|c, &a, &b| *c = self.geoid.get_height(a, b));
-        Ok(c.into_pyarray(py))
+        Ok(c.into_pyarray_bound(py))
     }
 }
 
 /// A Python module implemented in Rust.
 #[pymodule]
-fn japan_geoid(_py: Python, m: &PyModule) -> PyResult<()> {
+fn japan_geoid(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_class::<GsiGeoid>()?;
     m.add_function(wrap_pyfunction!(load_embedded_gsigeo2011, m)?)?;
     Ok(())

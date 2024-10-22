@@ -1,6 +1,6 @@
 [package]
 name = "japan-geoid-py"
-version = "0.4.2"
+version = "0.4.3"
 edition.workspace = true
 categories.workspace = true
 description.workspace = true
@@ -11,6 +11,6 @@ name = "japan_geoid"
 crate-type = ["cdylib"]
 
 [dependencies]
-pyo3 = "0.21.2"
-numpy = "0.21.0"
+pyo3 = "0.22.5"
+numpy = "0.22.0"
 japan-geoid = { path = "../" }
