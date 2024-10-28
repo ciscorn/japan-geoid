@@ -9,11 +9,10 @@ version = "0.4.3"
 edition = "2021"
 authors = [
     "Taku Fukada <naninunenor@gmail.com>",
-    "MIERUNE Inc. <info@mierune.co.jp>",
 ]
 description = "Calculates geoid heights for Japan using GSI's geoid model."
 license = "MIT"
-repository = "https://github.com/MIERUNE/japan-geoid"
+repository = "https://github.com/ciscorn/japan-geoid"
 categories = ["science", "science::geo"]
 
 [package]
