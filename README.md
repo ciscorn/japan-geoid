@@ -1,8 +1,8 @@
 # japan-geoid
 
-[![Test](https://github.com/MIERUNE/japan-geoid/actions/workflows/test.yml/badge.svg)](https://github.com/MIERUNE/japan-geoid/actions/workflows/test.yml)
-[![Maturin](https://github.com/MIERUNE/japan-geoid/actions/workflows/maturin.yml/badge.svg)](https://github.com/MIERUNE/japan-geoid/actions/workflows/maturin.yml)
-[![codecov](https://codecov.io/gh/MIERUNE/japan-geoid/graph/badge.svg?token=c9T2ayChfw)](https://codecov.io/gh/MIERUNE/japan-geoid)
+[![Test](https://github.com/ciscorn/japan-geoid/actions/workflows/test.yml/badge.svg)](https://github.com/ciscorn/japan-geoid/actions/workflows/test.yml)
+[![Maturin](https://github.com/ciscorn/japan-geoid/actions/workflows/maturin.yml/badge.svg)](https://github.com/ciscorn/japan-geoid/actions/workflows/maturin.yml)
+[![codecov](https://codecov.io/gh/ciscorn/japan-geoid/graph/badge.svg?token=c9T2ayChfw)](https://codecov.io/gh/ciscorn/japan-geoid)
 [![Crates.io Version](https://img.shields.io/crates/v/japan-geoid)](https://crates.io/crates/japan-geoid)
 [![PyPI - Version](https://img.shields.io/pypi/v/japan-geoid)](https://pypi.org/project/japan-geoid/)
 [![NPM Version](https://img.shields.io/npm/v/japan-geoid)](https://www.npmjs.com/package/japan-geoid)
