@@ -119,4 +119,3 @@ MIT License
 ## Authors
 
 Taku Fukada ([@ciscorn](https://github.com/ciscorn))
-
