@@ -1,5 +1,5 @@
 """
-usage: isg2asc GSIGEO2024beta.isg
+usage: isg2asc JPGEO2024beta.isg
 """
 
 import sys

@@ -9,12 +9,11 @@ pub trait Grid {
 
     #[inline]
     fn get_interpolated_value(&self, x: f64, y: f64) -> f64 {
-        use std::f64::NAN;
         let grid = self.grid_info();
         let grid_x = (x - grid.x_min as f64) * (grid.x_denom as f64);
         let grid_y = (y - grid.y_min as f64) * (grid.y_denom as f64);
         if grid_x < 0.0 || grid_y < 0.0 {
-            return NAN;
+            return f64::NAN;
         }
 
         let ix = grid_x.floor() as u32;
@@ -23,13 +22,13 @@ pub trait Grid {
         let y_residual = grid_y - iy as f64;
 
         if ix >= grid.x_num || iy >= grid.y_num {
-            NAN
+            f64::NAN
         } else {
             let lookup_or_nan = |x, y, cond: bool| {
                 if cond {
                     self.lookup_grid_points(x, y)
                 } else {
-                    NAN
+                    f64::NAN
                 }
             };
 
@@ -270,6 +269,7 @@ impl<'a> MemoryGrid<'a> {
 /// let height = geoid.get_height(138.2839817085188, 37.12378643088312);
 /// assert!((height - 39.473870927576634).abs() < 1e-6)
 /// ```
+#[cfg(feature = "gsigeo2011")]
 pub fn load_embedded_gsigeo2011() -> MemoryGrid<'static> {
     const EMBEDDED_MODEL: &[u8] = include_bytes!("gsigeo2011_ver2_2.bin.lz4");
     MemoryGrid::from_binary_reader(&mut std::io::Cursor::new(
@@ -278,18 +278,38 @@ pub fn load_embedded_gsigeo2011() -> MemoryGrid<'static> {
     .unwrap()
 }
 
-/// Loads the embedded GSIGEO2024 Japan geoid model.
+/// Loads the embedded JPGEO2024 Japan geoid model.
 ///
 /// ```
-/// use japan_geoid::gsi::load_embedded_gsigeo2024;
+/// use japan_geoid::gsi::load_embedded_jpgeo2024;
 /// use japan_geoid::Geoid;
 ///
-/// let geoid = load_embedded_gsigeo2024();
-/// let height = geoid.get_height(138.2839817085188, 37.12378643088312);
-/// assert!((height - 39.61005876363226).abs() < 1e-6)
+/// let geoid = load_embedded_jpgeo2024();
+/// let height = geoid.get_height(129.4724452614337, 28.314107779272373);
+/// assert!((height - 29.3442).abs() < 1e-4)
 /// ```
-pub fn load_embedded_gsigeo2024() -> MemoryGrid<'static> {
-    const EMBEDDED_MODEL: &[u8] = include_bytes!("gsigeo2024_beta.bin.lz4");
+#[cfg(feature = "jpgeo2024")]
+pub fn load_embedded_jpgeo2024() -> MemoryGrid<'static> {
+    const EMBEDDED_MODEL: &[u8] = include_bytes!("jpgeo2024.bin.lz4");
+    MemoryGrid::from_binary_reader(&mut std::io::Cursor::new(
+        lz4_flex::decompress_size_prepended(EMBEDDED_MODEL).unwrap(),
+    ))
+    .unwrap()
+}
+
+/// Loads the embedded Hrefconv2024 vshift model.
+///
+/// ```
+/// use japan_geoid::gsi::load_embedded_hrefconv2024;
+/// use japan_geoid::Geoid;
+///
+/// let geoid = load_embedded_hrefconv2024();
+/// let height = geoid.get_height(129.4724452614337, 28.314107779272373);
+/// assert!((height - 0.6670).abs() < 1e-4)
+/// ```
+#[cfg(feature = "jpgeo2024")]
+pub fn load_embedded_hrefconv2024() -> MemoryGrid<'static> {
+    const EMBEDDED_MODEL: &[u8] = include_bytes!("hrefconv2024.bin.lz4");
     MemoryGrid::from_binary_reader(&mut std::io::Cursor::new(
         lz4_flex::decompress_size_prepended(EMBEDDED_MODEL).unwrap(),
     ))
@@ -354,21 +374,22 @@ mod tests {
 
     #[test]
     fn embedded2024() {
-        let geoid = load_embedded_gsigeo2024();
+        let geoid = load_embedded_jpgeo2024();
         let _ = format!("{:?}", geoid);
 
         let height = geoid.get_height(138.2839817085188, 37.12378643088312);
-        assert!((height - 39.61005876363226).abs() < 1e-6);
+        println!("height: {}", height);
+        assert!((height - 39.5967).abs() < 1e-4);
 
         // compare with the results of GSI's 'geoidcalc' implementation
         let height = geoid.get_height(140.085365000, 36.104394000);
-        assert!((height - 40.3059).abs() < 1e-4);
+        assert!((height - 40.2920).abs() < 1e-4);
         let height = geoid.get_height(139.615526456, 35.160410123);
-        assert!((height - 36.7568).abs() < 1e-4);
+        assert!((height - 36.7434).abs() < 1e-4);
         let height = geoid.get_height(138.215695342, 36.832842854);
-        assert!((height - 41.6041).abs() < 1e-4);
+        assert!((height - 41.5903).abs() < 1e-4);
         let height = geoid.get_height(130., 30.);
-        assert!((height - 30.5669).abs() < 1e-4);
+        assert!((height - 30.5537).abs() < 1e-4);
 
         let height = geoid.get_height(120.0, 15.0);
         assert!(!f64::is_nan(height));

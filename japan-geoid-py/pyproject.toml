@@ -5,7 +5,7 @@ build-backend = "maturin"
 [project]
 name = "japan-geoid"
 description = "Calculate geoid heights for Japan using GSI's geoid model."
-readme = "README.md"
+readme = "../README.md"
 authors = [
   { name = "Taku Fukada", email = "naninunenor@gmail.com" },
   { name = "MIERUNE Inc.", email = "info@mierune.co.jp" },
@@ -24,5 +24,6 @@ classifiers = [
 repository = "https://github.com/MIERUNE/japan-geoid/"
 
 [tool.maturin]
+module-name = "japan_geoid"
 features = ["pyo3/extension-module"]
 

@@ -5,11 +5,10 @@ resolver = "2"
 members = ["./japan-geoid-*"]
 
 [workspace.package]
-version = "0.4.0"
-edition = "2021"
+version = "0.5.0"
+edition = "2024"
 authors = [
     "Taku Fukada <naninunenor@gmail.com>",
-    "MIERUNE Inc. <info@mierune.co.jp>",
 ]
 description = "Calculates geoid heights for Japan using GSI's geoid model."
 license = "MIT"
@@ -30,13 +29,18 @@ repository.workspace = true
 crate-type = ["cdylib", "rlib"]
 
 [dependencies]
-lz4_flex = { version = "0.11.1", default-features = false }
+lz4_flex = { version = "0.11.3", default-features = false }
+
+[features]
+default = ["gsigeo2011", "jpgeo2024"]
+gsigeo2011 = []
+jpgeo2024 = []
 
 [target.'cfg(target_arch = "wasm32")'.dependencies]
-wasm-bindgen = "0.2.84"
+wasm-bindgen = "0.2.100"
 
 [target.'cfg(target_arch = "wasm32")'.dev-dependencies]
-wasm-bindgen-test = "0.3.34"
+wasm-bindgen-test = "0.3.50"
 
 [profile.dev.package."*"]
 opt-level = 1
