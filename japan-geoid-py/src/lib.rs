@@ -83,7 +83,7 @@ impl GsiGeoid {
             .and(lng.as_array())
             .and(lat.as_array())
             .for_each(|c, &a, &b| *c = self.geoid.get_height(a, b));
-        Ok(c.into_pyarray(py))
+        Ok(c.into_pyarray_bound(py))
     }
 }
 

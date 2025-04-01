@@ -12,7 +12,7 @@ authors = [
 ]
 description = "Calculates geoid heights for Japan using GSI's geoid model."
 license = "MIT"
-repository = "https://github.com/MIERUNE/japan-geoid"
+repository = "https://github.com/ciscorn/japan-geoid"
 categories = ["science", "science::geo"]
 
 [package]

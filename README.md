@@ -104,6 +104,12 @@ console.log(
 ); // => Float64Array(2) [ 39.47387115961899, 31.90071200378531 ]
 ```
 
+### Build
+
+```bash
+wasm-pack build -t web
+```
+
 ## License
 
 MIT License
