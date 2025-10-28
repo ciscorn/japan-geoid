@@ -39,7 +39,7 @@ impl GsiGeoid {
     }
 
     /// Serialize the geoid model in the efficient binary format.
-    fn to_binary(&self) -> PyResult<Cow<[u8]>> {
+    fn to_binary(&self) -> PyResult<Cow<'_, [u8]>> {
         let mut buf = Vec::new();
         self.geoid.to_binary_writer(&mut buf)?;
         Ok(buf.into())
@@ -67,7 +67,7 @@ impl GsiGeoid {
             .and(lng.as_array())
             .and(lat.as_array())
             .for_each(|c, &a, &b| *c = self.geoid.get_height(a, b));
-        Ok(c.into_pyarray_bound(py))
+        Ok(c.into_pyarray(py))
     }
 }
 
