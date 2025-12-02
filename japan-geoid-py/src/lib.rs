@@ -20,13 +20,52 @@ pub fn load_embedded_gsigeo2011() -> PyResult<GsiGeoid> {
     })
 }
 
+/// Load the embedded JPGEO2024 geoid model.
+///
+/// JPGEO2024 is the geoid model for Japan Geodetic Datum 2024 (JGD2024).
+#[pyfunction]
+pub fn load_embedded_jpgeo2024() -> PyResult<GsiGeoid> {
+    Ok(GsiGeoid {
+        geoid: ::japan_geoid::gsi::load_embedded_jpgeo2024(),
+    })
+}
+
+/// Load the embedded Hrefconv2024 (height reference conversion) model.
+///
+/// Hrefconv2024 provides reference surface correction parameters for remote islands.
+#[pyfunction]
+pub fn load_embedded_hrefconv2024() -> PyResult<GsiGeoid> {
+    Ok(GsiGeoid {
+        geoid: ::japan_geoid::gsi::load_embedded_hrefconv2024(),
+    })
+}
+
+/// Load the embedded JPGEO2024 + Hrefconv2024 combined model.
+///
+/// This model combines the JPGEO2024 geoid model with the Hrefconv2024
+/// height reference correction.
+#[pyfunction]
+pub fn load_embedded_jpgeo2024_hrefconv2024() -> PyResult<GsiGeoid> {
+    Ok(GsiGeoid {
+        geoid: ::japan_geoid::gsi::load_embedded_jpgeo2024_hrefconv2024(),
+    })
+}
+
 #[pymethods]
 impl GsiGeoid {
-    /// Load the geoid model from the original ascii format.
+    /// Load the geoid model from the original ascii format (GSI ASC format).
     #[classmethod]
     fn from_ascii(_cls: &Bound<'_, PyType>, content: &str) -> PyResult<Self> {
         let mut reader = std::io::Cursor::new(content);
         let geoid = MemoryGrid::from_ascii_reader(&mut reader)?;
+        Ok(GsiGeoid { geoid })
+    }
+
+    /// Load the geoid model from ISG format.
+    #[classmethod]
+    fn from_isg(_cls: &Bound<'_, PyType>, content: &str) -> PyResult<Self> {
+        let mut reader = std::io::BufReader::new(std::io::Cursor::new(content));
+        let geoid = MemoryGrid::from_isg_reader(&mut reader)?;
         Ok(GsiGeoid { geoid })
     }
 
@@ -76,5 +115,8 @@ impl GsiGeoid {
 fn japan_geoid(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_class::<GsiGeoid>()?;
     m.add_function(wrap_pyfunction!(load_embedded_gsigeo2011, m)?)?;
+    m.add_function(wrap_pyfunction!(load_embedded_jpgeo2024, m)?)?;
+    m.add_function(wrap_pyfunction!(load_embedded_hrefconv2024, m)?)?;
+    m.add_function(wrap_pyfunction!(load_embedded_jpgeo2024_hrefconv2024, m)?)?;
     Ok(())
 }

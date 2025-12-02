@@ -4,6 +4,7 @@ build-backend = "maturin"
 
 [project]
 name = "japan-geoid"
+dynamic = ["version"]
 description = "Calculate geoid heights for Japan using GSI's geoid model."
 authors = [
   { name = "Taku Fukada", email = "naninunenor@gmail.com" },
