@@ -9,12 +9,11 @@ pub trait Grid {
 
     #[inline]
     fn get_interpolated_value(&self, x: f64, y: f64) -> f64 {
-        use std::f64::NAN;
         let grid = self.grid_info();
         let grid_x = (x - grid.x_min as f64) * (grid.x_denom as f64);
         let grid_y = (y - grid.y_min as f64) * (grid.y_denom as f64);
         if grid_x < 0.0 || grid_y < 0.0 {
-            return NAN;
+            return f64::NAN;
         }
 
         let ix = grid_x.floor() as u32;
@@ -23,13 +22,13 @@ pub trait Grid {
         let y_residual = grid_y - iy as f64;
 
         if ix >= grid.x_num || iy >= grid.y_num {
-            NAN
+            f64::NAN
         } else {
             let lookup_or_nan = |x, y, cond: bool| {
                 if cond {
                     self.lookup_grid_points(x, y)
                 } else {
-                    NAN
+                    f64::NAN
                 }
             };
 
@@ -542,7 +541,7 @@ mod tests {
     #[test]
     fn embedded() {
         let geoid = load_embedded_gsigeo2011();
-        let _ = format!("{:?}", geoid);
+        let _ = format!("{geoid:?}");
 
         // Compare with the result of PROJ
         let height = geoid.get_height(138.2839817085188, 37.12378643088312);
@@ -577,7 +576,7 @@ mod tests {
         assert!(f64::is_nan(height));
 
         let info = geoid.grid_info();
-        let _ = format!("{:?}", info);
+        let _ = format!("{info:?}");
         assert_eq!(info.x_num, 1201);
         assert_eq!(info.y_num, 1801);
         assert_eq!(info.version, "ver2.2\0\0\0\0");
@@ -627,14 +626,14 @@ mod tests {
             else {
                 panic!("expected error");
             };
-            println!("{:?}", err);
+            println!("{err:?}");
         }
     }
 
     #[test]
     fn embedded_jpgeo2024() {
         let geoid = load_embedded_jpgeo2024();
-        let _ = format!("{:?}", geoid);
+        let _ = format!("{geoid:?}");
 
         // Tokyo
         let height = geoid.get_height(139.6917, 35.6895);

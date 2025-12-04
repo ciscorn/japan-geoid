@@ -5,7 +5,7 @@ use japan_geoid::gsi::MemoryGrid;
 use japan_geoid::Geoid;
 
 fn convert_isg_file(input_path: &str, output_path: &str) -> std::io::Result<()> {
-    println!("Converting {} -> {}", input_path, output_path);
+    println!("Converting {input_path} -> {output_path}");
 
     // Load from ISG format
     let mut reader = BufReader::new(File::open(input_path)?);
@@ -16,7 +16,7 @@ fn convert_isg_file(input_path: &str, output_path: &str) -> std::io::Result<()> 
     // Test with a sample point (Tokyo)
     let (lng, lat) = (139.6917, 35.6895);
     let height = geoid.get_height(lng, lat);
-    println!("  Sample point (Tokyo): ({}, {}) -> {}", lng, lat, height);
+    println!("  Sample point (Tokyo): ({lng}, {lat}) -> {height}");
 
     // Dump as the efficient binary format with LZ4 compression
     let mut buf = Vec::new();
