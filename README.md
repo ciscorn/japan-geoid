@@ -69,7 +69,9 @@ geoid.get_heights(
 
 ### Installation
 
-```
+If you want to use the JPGEO2024+Hrefconv2024 model:
+
+```bash
 cargo add japan-geoid -F jpgeo2024_hrefconv2024
 ```
 
