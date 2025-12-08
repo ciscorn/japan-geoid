@@ -14,8 +14,7 @@ fn main() -> std::io::Result<()> {
     // Calculate the geoid height.
     let height = geoid.get_height(lng, lat);
     println!(
-        "Input: (lng: {}, lat: {}) -> Geoid height: {}",
-        lng, lat, height
+        "Input: (lng: {lng}, lat: {lat}) -> Geoid height: {height}"
     );
 
     // Dump as the efficient binary format.
@@ -31,8 +30,7 @@ fn main() -> std::io::Result<()> {
 
     let height = geoid.get_height(lng, lat);
     println!(
-        "Input: (lng: {}, lat: {}) -> Geoid height: {}",
-        lng, lat, height
+        "Input: (lng: {lng}, lat: {lat}) -> Geoid height: {height}"
     );
 
     Ok(())
