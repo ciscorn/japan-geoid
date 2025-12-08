@@ -11,6 +11,7 @@ A library for calculating geoid heights in Japan using GSI's geoid model. It is 
 
 日本のジオイド高を計算するためライブラリです。Rust で実装されており、Python と JavaScript (Wasm) でも利用できます。国土地理院のジオイドモデルを用いて、国土地理院による C++ のサンプルコードに準拠した補間計算を行います。
 
+
 ## Supported Models
 
 | Model | Function | Description |
@@ -25,6 +26,7 @@ A library for calculating geoid heights in Japan using GSI's geoid model. It is 
 License: MIT
 
 本ライブラリは、国土地理院が提供するものではありません。
+
 
 ## Python
 
@@ -62,6 +64,7 @@ geoid.get_heights(
 )
 ```
 
+
 ## Rust
 
 ### Installation
@@ -89,6 +92,7 @@ fn main() {
     assert!(f64::is_nan(geoid.get_height(10.0, 10.0)))
 }
 ```
+
 
 ## JavaScript (Wasm) - Experimental
 
@@ -129,12 +133,16 @@ console.log(
 wasm-pack build -t web
 ```
 
+
 ## License
 
 MIT License
 
-測量法に基づく国土地理院長承認（使用）R 5JHs 560
 
 ## Authors
 
-Taku Fukada ([@ciscorn](https://github.com/ciscorn))
+- Taku Fukada ([@ciscorn](https://github.com/ciscorn)) - 測量法に基づく国土地理院長承認（使用）R 5JHs 560
+- [@rot1204](https://github.com/rot1204)
+- and [all contributors][https://github.com/ciscorn/japan-geoid/graphs/contributors]!
+
+
