@@ -132,8 +132,12 @@ console.log(
 ### Build
 
 ```bash
-wasm-pack build -t web
+wasm-pack build -t web --all-features
 ```
+
+## Golang
+
+See: <https://github.com/eukarya-inc/japan-geoid-go>
 
 
 ## License
