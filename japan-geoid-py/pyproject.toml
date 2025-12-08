@@ -10,7 +10,7 @@ authors = [
   { name = "Taku Fukada", email = "naninunenor@gmail.com" },
 ]
 license = "MIT"
-requires-python = ">=3.8"
+requires-python = ">=3.9"
 classifiers = [
     "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: Implementation :: CPython",
@@ -24,4 +24,3 @@ repository = "https://github.com/ciscorn/japan-geoid/"
 
 [tool.maturin]
 features = ["pyo3/extension-module"]
-

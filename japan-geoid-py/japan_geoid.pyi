@@ -5,8 +5,17 @@ from numpy import ndarray
 def load_embedded_gsigeo2011() -> GsiGeoid:
     """Load the embedded GSIGEO2011 Japan geoid model."""
 
+def load_embedded_jpgeo2024() -> GsiGeoid:
+    """Load the embedded JPGEO2024 Japan geoid model."""
+
+def load_embedded_hrefconv2024() -> GsiGeoid:
+    """Load the embedded Hrefconv2024 parameter model."""
+
+def load_embedded_jpgeo2024_hrefconv2024() -> GsiGeoid:
+    """Load the embedded JPGEO2024+Hrefconv2024 geoid model."""
+
 class GsiGeoid:
-    """GSIGEO2011 geoid model for Japan."""
+    """GSI's geoid model for Japan."""
 
     @classmethod
     def from_ascii(cls, content: str) -> Self:

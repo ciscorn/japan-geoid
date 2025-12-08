@@ -17,9 +17,9 @@ A library for calculating geoid heights in Japan using GSI's geoid model. It is 
 | Model | Function | Description |
 |-------|----------|-------------|
 | GSIGEO2011 | `load_embedded_gsigeo2011` | [日本のジオイド2011](https://www.gsi.go.jp/buturisokuchi/grageo_reference.html) v.2.2 |
-| JPGEO2024 | `load_embedded_jpgeo2024` | [ジオイド2024](https://service.gsi.go.jp/kiban/app/geoid/) (JGD2024用・海域含む大容量) |
-| Hrefconv2024 | `load_embedded_hrefconv2024` | [基準面補正パラメータ2024](https://service.gsi.go.jp/kiban/app/geoid/) (離島用) |
-| **JPGEO2024+Hrefconv2024** | `load_embedded_jpgeo2024_hrefconv2024` | [JPGEO2024+Hrefconv2024](https://service.gsi.go.jp/kiban/app/geoid/)結合版 (陸域のみ・離島対応・小容量) |
+| JPGEO2024 | `load_embedded_jpgeo2024` | [ジオイド2024](https://service.gsi.go.jp/kiban/app/geoid/) （JGD2024用、海域含む大容量） |
+| Hrefconv2024 | `load_embedded_hrefconv2024` | [基準面補正パラメータ2024](https://service.gsi.go.jp/kiban/app/geoid/) （離島用） |
+| **JPGEO2024+Hrefconv2024** | `load_embedded_jpgeo2024_hrefconv2024` | [JPGEO2024+Hrefconv2024](https://service.gsi.go.jp/kiban/app/geoid/) 合成版（陸域のみのため小容量） |
 
 測量法に基づく国土地理院長承認（使用）R 5JHs 560
 
@@ -70,7 +70,7 @@ geoid.get_heights(
 ### Installation
 
 ```
-cargo add japan-geoid
+cargo add japan-geoid -F jpgeo2024_hrefconv2024
 ```
 
 ### Usage
@@ -143,6 +143,4 @@ MIT License
 
 - Taku Fukada ([@ciscorn](https://github.com/ciscorn)) - 測量法に基づく国土地理院長承認（使用）R 5JHs 560
 - [@rot1204](https://github.com/rot1204)
-- and [all contributors][https://github.com/ciscorn/japan-geoid/graphs/contributors]!
-
-
+- and [all contributors](https://github.com/ciscorn/japan-geoid/graphs/contributors)!
