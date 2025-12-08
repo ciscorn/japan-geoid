@@ -432,6 +432,7 @@ impl<'a> MemoryGrid<'a> {
     }
 }
 
+#[cfg(feature = "gsigeo2011")]
 /// Loads the embedded GSIGEO2011 Japan geoid model.
 ///
 /// ```
@@ -450,6 +451,7 @@ pub fn load_embedded_gsigeo2011() -> MemoryGrid<'static> {
     .unwrap()
 }
 
+#[cfg(feature = "jpgeo2024")]
 /// Loads the embedded JPGEO2024 Japan geoid model.
 ///
 /// JPGEO2024 is the geoid model for Japan Geodetic Datum 2024 (JGD2024).
@@ -475,6 +477,7 @@ pub fn load_embedded_jpgeo2024() -> MemoryGrid<'static> {
     .unwrap()
 }
 
+#[cfg(feature = "hrefconv2024")]
 /// Loads the embedded Hrefconv2024 (height reference conversion) model.
 ///
 /// Hrefconv2024 provides reference surface correction parameters for converting
@@ -504,6 +507,7 @@ pub fn load_embedded_hrefconv2024() -> MemoryGrid<'static> {
     .unwrap()
 }
 
+#[cfg(feature = "jpgeo2024_hrefconv2024")]
 /// Loads the embedded JPGEO2024 + Hrefconv2024 combined model.
 ///
 /// This model combines the JPGEO2024 geoid model with the Hrefconv2024
@@ -539,6 +543,7 @@ mod tests {
     use super::*;
 
     #[test]
+    #[cfg(feature = "gsigeo2011")]
     fn embedded() {
         let geoid = load_embedded_gsigeo2011();
         let _ = format!("{geoid:?}");
@@ -631,6 +636,7 @@ mod tests {
     }
 
     #[test]
+    #[cfg(feature = "jpgeo2024")]
     fn embedded_jpgeo2024() {
         let geoid = load_embedded_jpgeo2024();
         let _ = format!("{geoid:?}");
@@ -653,6 +659,7 @@ mod tests {
     }
 
     #[test]
+    #[cfg(feature = "hrefconv2024")]
     fn embedded_hrefconv2024() {
         let hrefconv = load_embedded_hrefconv2024();
 
@@ -662,6 +669,7 @@ mod tests {
     }
 
     #[test]
+    #[cfg(feature = "jpgeo2024_hrefconv2024")]
     fn embedded_jpgeo2024_hrefconv2024() {
         let combined = load_embedded_jpgeo2024_hrefconv2024();
 
