@@ -148,5 +148,5 @@ MIT License
 ## Authors
 
 - Taku Fukada ([@ciscorn](https://github.com/ciscorn)) - 測量法に基づく国土地理院長承認（使用）R 5JHs 560
-- [@rot1204](https://github.com/rot1204)
+- [@rot1024](https://github.com/rot1024)
 - and [all contributors](https://github.com/ciscorn/japan-geoid/graphs/contributors)!
